@@ -187,6 +187,8 @@ retorno: afnd creado, NULL en caso de error
 */
 AFND* AFND1ODeSimbolo(char* sim);
 
+AFND* AFND1ODeLambda();
+AFND* AFND1ODeVacio();
 
 AFND* AFND1OUne(AFND* afnd1, AFND* afnd2);
 AFND* AFND1OConcatena(AFND* afnd1, AFND* afnd2);
