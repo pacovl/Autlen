@@ -61,7 +61,7 @@ void insert_simbolo(Conjunto_simbolos *conjunto_simbolos, char *sym)
 	}
 
 	for ( i = 0; i < conjunto_simbolos->nsym; i++) {
-		if (!strcmp(sym, conjunto_simbolos->simbolos[i])) {
+		if (!strcmp(sym, conjunto_simbolos->simbolos[i]) && strcmp(conjunto_simbolos->nombre, "Cadena") > 0) {
 			return;
 		}
 	}

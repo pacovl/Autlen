@@ -728,6 +728,8 @@ AFND* AFND1OConcatena(AFND* afnd1, AFND* afnd2) {
         } else if (get_tipo_estado(afnd1->estados[i]) == INICIAL_y_FINAL) {
             AFNDInsertaEstado(p_afnd, nombreAux, INICIAL);
             strcpy(nombreFinalA1, nombreAux);
+        } else {
+            AFNDInsertaEstado(p_afnd, nombreAux, NORMAL);
         }
     }
     /* Copia conjunto de transiciones */
@@ -749,6 +751,8 @@ AFND* AFND1OConcatena(AFND* afnd1, AFND* afnd2) {
         } else if (get_tipo_estado(afnd2->estados[i]) == INICIAL_y_FINAL) {
             AFNDInsertaLTransicion(p_afnd, nombreFinalA1, nombreAux);
             AFNDInsertaEstado(p_afnd, nombreAux, FINAL);
+        } else {
+            AFNDInsertaEstado(p_afnd, nombreAux, NORMAL);
         }
     }
     /* Copia conjunto de transiciones */
