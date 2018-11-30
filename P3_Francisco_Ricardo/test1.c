@@ -49,13 +49,21 @@ int main(int argc, char **argv)
     AFNDImprime(stdout, p_afnd_l2);
     fprintf(stdout, "A CONTINUACIÓN SE VA A MOSTRAR LA UNIÓN DE DOS AUTÓMATAS QUE VIENEN DE EXPRESIONES REGULARES, UNO DE ELLOS ES EL CORRESPONDIENTE A LA EXPRESION \"1\" QUE YA SE MOSTRÓ ANTERIORMENTE, EL OTRO ES EL DE LA EXPRESIÓN \"0\" QUE SE MUESTRA A CONTINUACIÓN\n");
     AFNDImprime(stdout, p_afnd_l0);
-    fprintf(stdout, "Y ESTA ES SU UNIÓN\n");
+    fprintf(stdout, "Y ESTA ES SU UNIÓN [ 0+1 ]\n");
+    // 0+1
     AFNDImprime(stdout, p_afnd_l4);
     fprintf(stdout, "SE MUESTRA EL AUTÓMATA FINITO CORRESPONDIENTE A LA EXPRESION \"1\" * A PARTIR DEL AUTÓMATA ASOCIADO CON \"1\" QUE YA SE MOSTRÓ ANTERIORMENTE\n");
+    // 1*
     AFNDImprime(stdout, p_afnd_l6);
+
+    /* SE CREA UN AUTÓMATA FINITO PARA LA EXPRESIÓN ( “0”+”1” ) * */
+    // (0+1)*
+    fprintf(stdout, "Y ESTE es (0+1)*\n");
+    AFNDImprime(stdout, p_afnd_l5);
 
     /********************************************************/
     fprintf(stdout, "Y, A CONTINUACIÓN, ALGUNOS EJEMPLOS DE PROCESADO DE CADENAS DEL AUTÓMATA DE LA EXPRESIÓN 11(0+1)*\n");
+    // 11(0+1)*
     AFNDImprime(stdout, p_afnd_l3);
     fprintf(stdout, "\tLA CADENA 11 ES RECONOCIDA POR EL AUTOMATA DE 11(0+1)* POR SU PRINCIPIO\n");
     AFNDInsertaLetra(p_afnd_l3, "1");

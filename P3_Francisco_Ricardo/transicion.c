@@ -475,7 +475,7 @@ int mapear_estado(Transicion *t, char *est)
 	return t->nest - 1;
 }
 
-void copiar_transiciones(Transicion *t_clon, Transicion *t_afnd, char * ext) {
+void copiar_transiciones(Transicion *t_clon, Transicion *t_afnd, char * ext, char * ext2) {
 	int i, j, k;
 	char q0[MAX], qf[MAX];
 
@@ -483,16 +483,20 @@ void copiar_transiciones(Transicion *t_clon, Transicion *t_afnd, char * ext) {
 		for (j = 0; j < t_afnd->dim_matriz; j++) {
 			for (k = 0; k < t_afnd->dim_matriz; k++) {
 				if (t_afnd->transiciones[i][j][k] == EXISTE) {
-					sprintf(q0, "%s_%s", t_afnd->estados[j], ext);
-					sprintf(qf, "%s_%s", t_afnd->estados[k], ext);
-					
+					if (!ext2) {
+						sprintf(q0, "%s_%s", t_afnd->estados[j], ext);
+						sprintf(qf, "%s_%s", t_afnd->estados[k], ext);
+					}
+					sprintf(q0, "%s_%s_%s", t_afnd->estados[j], ext, ext2);
+					sprintf(qf, "%s_%s_%s", t_afnd->estados[k], ext, ext2);
+
 					set_valor_transicion(t_clon, t_afnd->simbolos[i], q0, qf);
 				}
 			}
 		}
 	}
 
-	return;	
+	return;
 }
 
 void transicion_rename(Transicion *t, char *oldName, char* name) {
@@ -506,7 +510,6 @@ void transicion_rename(Transicion *t, char *oldName, char* name) {
 			strcpy(t->estados[i], name);
 		}
 	}
-	
+
 	return;
 }
-

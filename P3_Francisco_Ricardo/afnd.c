@@ -645,7 +645,7 @@ AFND* AFND1OUne(AFND* afnd1, AFND* afnd2) {
         AFNDInsertaSimbolo(p_afnd, nombreAux);
     }
     for (i = 0; i < afnd1->nest; i++) { /* Copia conjunto estados */
-        sprintf(nombreAux, "%s_%s", get_name_estado(afnd1->estados[i]), afnd1->nombre);
+        sprintf(nombreAux, "%s_%s_a", get_name_estado(afnd1->estados[i]), afnd1->nombre);
         // Estados normales para la union, mantener para estrella, movida para concat
         AFNDInsertaEstado(p_afnd, nombreAux, NORMAL);
 
@@ -659,7 +659,7 @@ AFND* AFND1OUne(AFND* afnd1, AFND* afnd2) {
         }
     }
     /* Copia conjunto de transiciones */
-    copiar_transiciones(p_afnd->trans, afnd1->trans, afnd1->nombre);
+    copiar_transiciones(p_afnd->trans, afnd1->trans, afnd1->nombre, "a");
 
     /* Inclusion del segundo andf */
     for (i = 0; i < afnd2->nsim; i++) { /* Copia alfabeto */
@@ -667,7 +667,7 @@ AFND* AFND1OUne(AFND* afnd1, AFND* afnd2) {
         AFNDInsertaSimbolo(p_afnd, nombreAux);
     }
     for (i = 0; i < afnd2->nest; i++) { /* Copia conjunto estados */
-        sprintf(nombreAux, "%s_%s", get_name_estado(afnd2->estados[i]), afnd2->nombre);
+        sprintf(nombreAux, "%s_%s_b", get_name_estado(afnd2->estados[i]), afnd2->nombre);
         // Estados normales para la union, mantener para estrella, movida para concat
         AFNDInsertaEstado(p_afnd, nombreAux, NORMAL);
 
@@ -681,7 +681,7 @@ AFND* AFND1OUne(AFND* afnd1, AFND* afnd2) {
         }
     }
     /* Copia conjunto de transiciones */
-    copiar_transiciones(p_afnd->trans, afnd2->trans, afnd2->nombre);
+    copiar_transiciones(p_afnd->trans, afnd2->trans, afnd2->nombre, "b");
 
     for(i = 0; i < p_afnd->nest; i++) {
         sprintf(nombreAux, "q%d", i);
@@ -717,7 +717,7 @@ AFND* AFND1OConcatena(AFND* afnd1, AFND* afnd2) {
         AFNDInsertaSimbolo(p_afnd, nombreAux);
     }
     for (i = 0; i < afnd1->nest; i++) { /* Copia conjunto estados */
-        sprintf(nombreAux, "%s_%s", get_name_estado(afnd1->estados[i]), afnd1->nombre);
+        sprintf(nombreAux, "%s_%s_a", get_name_estado(afnd1->estados[i]), afnd1->nombre);
         // Estados normales para la union, mantener para estrella, movida para concat
         if (get_tipo_estado(afnd1->estados[i]) == INICIAL) {
             AFNDInsertaEstado(p_afnd, nombreAux, INICIAL);
@@ -731,7 +731,7 @@ AFND* AFND1OConcatena(AFND* afnd1, AFND* afnd2) {
         }
     }
     /* Copia conjunto de transiciones */
-    copiar_transiciones(p_afnd->trans, afnd1->trans, afnd1->nombre);
+    copiar_transiciones(p_afnd->trans, afnd1->trans, afnd1->nombre, "a");
 
     /* Inclusion del segundo andf */
     for (i = 0; i < afnd2->nsim; i++) { /* Copia alfabeto */
@@ -739,7 +739,7 @@ AFND* AFND1OConcatena(AFND* afnd1, AFND* afnd2) {
         AFNDInsertaSimbolo(p_afnd, nombreAux);
     }
     for (i = 0; i < afnd2->nest; i++) { /* Copia conjunto estados */
-        sprintf(nombreAux, "%s_%s", get_name_estado(afnd2->estados[i]), afnd2->nombre);
+        sprintf(nombreAux, "%s_%s_b", get_name_estado(afnd2->estados[i]), afnd2->nombre);
 
         if (get_tipo_estado(afnd2->estados[i]) == INICIAL) {
             AFNDInsertaEstado(p_afnd, nombreAux, NORMAL);
@@ -752,7 +752,7 @@ AFND* AFND1OConcatena(AFND* afnd1, AFND* afnd2) {
         }
     }
     /* Copia conjunto de transiciones */
-    copiar_transiciones(p_afnd->trans, afnd2->trans, afnd2->nombre);
+    copiar_transiciones(p_afnd->trans, afnd2->trans, afnd2->nombre, "b");
 
     /* Renombramos todos los estados secuencialmente */
     for(i = 0; i < p_afnd->nest; i++) {
@@ -794,7 +794,7 @@ AFND* AFND1OEstrella(AFND* afnd) {
         AFNDInsertaSimbolo(p_afnd, nombreAux);
     }
     for (i = 0; i < afnd->nest; i++) { /* Copia conjunto estados */
-        sprintf(nombreAux, "%s_%s", get_name_estado(afnd->estados[i]), afnd->nombre);
+        sprintf(nombreAux, "%s_%s_a", get_name_estado(afnd->estados[i]), afnd->nombre);
         // Estados normales para la union, mantener para estrella, movida para concat
         AFNDInsertaEstado(p_afnd, nombreAux, NORMAL);
 
@@ -812,7 +812,7 @@ AFND* AFND1OEstrella(AFND* afnd) {
     AFNDInsertaLTransicion(p_afnd, nombreFin, nombreIni);
 
     /* Copia conjunto de transiciones */
-    copiar_transiciones(p_afnd->trans, afnd->trans, afnd->nombre);
+    copiar_transiciones(p_afnd->trans, afnd->trans, afnd->nombre, "a");
 
     for(i = 0; i < p_afnd->nest; i++) {
         sprintf(nombreAux, "q%d", i);

@@ -20,11 +20,11 @@ Modulo que define el TAD automata finito no determinista.
 #define NSIM_BASICO 1
 #define NSIM_VACIO 0
 
-#define MAX 64
+#define MAX 1024
 
 typedef struct _AFND AFND;
 
-/* 
+/*
 nombre: AFNDNuevo
 desc: crea un AFND
 args:
@@ -35,7 +35,7 @@ retorno: retorno al AFND creado
 */
 AFND *AFNDNuevo(char *nombre, int nest, int nsim);
 
-/* 
+/*
 nombre: AFNDElimina
 desc: libera los recursos reservados para el afnd
 args:
@@ -44,7 +44,7 @@ retorno: -
 */
 void AFNDElimina(AFND *afnd);
 
-/* 
+/*
 nombre: AFNDInsertaSimbolo
 desc: inserta un nuevo simbolo que maneja el afnd
 args:
@@ -54,7 +54,7 @@ retorno: -
 */
 void AFNDInsertaSimbolo(AFND *afnd, char *sim);
 
-/* 
+/*
 nombre: AFNDInsertaEstado
 desc: anade un nuevo estado al automata
 args:
@@ -65,7 +65,7 @@ retorno: -
 */
 void AFNDInsertaEstado(AFND *afnd, char *nombre, int tipo);
 
-/* 
+/*
 nombre: AFNDInsertaTransicion
 desc: anade una transicion al automata
 args:
@@ -77,7 +77,7 @@ retorno: -
 */
 void AFNDInsertaTransicion(AFND *afnd, char *nombreEstadoSalida, char *nombreSim, char *nombreEstadoLlegada);
 
-/* 
+/*
 nombre: AFNDImprime
 desc: imprime informacion del automata
 args:
@@ -87,7 +87,7 @@ retorno: -
 */
 void AFNDImprime(FILE *f, AFND *afnd);
 
-/* 
+/*
 nombre: AFNDInsertaLetra
 desc: inserta una letra a la cadena de entrada
 args:
@@ -97,7 +97,7 @@ retorno: puntero al automata
 */
 AFND *AFNDInsertaLetra(AFND *afnd, char *nombreLetra);
 
-/* 
+/*
 nombre: AFNDInicializaEstado
 desc: Establece al estado INICIAL como el actual
 args:
@@ -106,7 +106,7 @@ retorno: -
 */
 AFND *AFNDInicializaEstado(AFND *afnd);
 
-/* 
+/*
 nombre: AFNDImprimeCadenaActual
 desc: imprime la cadena entrante establecida
 args:
@@ -116,7 +116,7 @@ retorno: -
 */
 void AFNDImprimeCadenaActual(FILE *f, AFND *afnd);
 
-/* 
+/*
 nombre: AFNDProcesaEntrada
 desc: algoritmo para procesar un afnd
 args:
@@ -126,7 +126,7 @@ retorno: -
 */
 int AFNDProcesaEntrada(FILE *f, AFND *afnd);
 
-/* 
+/*
 nombre: AFNDInsertaLTransicion
 desc: permite insertar transiciones lambda
 args:
@@ -137,7 +137,7 @@ retorno: -
 */
 AFND *AFNDInsertaLTransicion(AFND *afnd, char *q0, char *qf);
 
-/* 
+/*
 nombre: AFNDCierraLTransicion
 desc: induce las obtenidas por transitividad
 args:
@@ -146,7 +146,7 @@ retorno: -
 */
 AFND *AFNDCierraLTransicion(AFND *afnd);
 
-/* 
+/*
 nombre: AFNDInicializaCadenaActual
 desc: prepara el afnd para introducir una nueva cadena
 args:
@@ -155,7 +155,7 @@ retorno: puntero a AFND
 */
 AFND *AFNDInicializaCadenaActual(AFND *afnd);
 
-/* 
+/*
 nombre: get_estado_from_name
 desc: devuelve un estado del afnd a partir de su nombre
 args:
@@ -165,7 +165,7 @@ retorno: estado encontrado o NULL si no se encuentra
 */
 Estado *get_estado_from_name(AFND *afnd, char *name);
 
-/* 
+/*
 nombre: sin_repetidos
 desc: indica si cierto entero se encuentra en un array de enteros
 args:
@@ -178,7 +178,7 @@ int sin_repetidos(int *actuales_aux, int id_aux, int tam);
 
 /* -------------- Funciones para la P3 ------------------- */
 
-/* 
+/*
 nombre: AFND1ODeSimbolo
 desc: crea un automata basico que reconozco un unico simbolo
 args:
