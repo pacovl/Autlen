@@ -42,6 +42,14 @@ int main(int argc, char **argv)
     p_afnd_l4 = AFNDCierraLTransicion(p_afnd_l4);
     p_afnd_l5 = AFNDCierraLTransicion(p_afnd_l5);
     p_afnd_l6 = AFNDCierraLTransicion(p_afnd_l6);
+
+    AFNDADot(p_afnd_l0);
+    AFNDADot(p_afnd_l1);
+    AFNDADot(p_afnd_l2);
+    AFNDADot(p_afnd_l3);
+    AFNDADot(p_afnd_l4);
+    AFNDADot(p_afnd_l5);
+    AFNDADot(p_afnd_l6);
     /********************************************************/
     fprintf(stdout, "EJEMPLO DE AUTÓMATA DE UNA EXPRESIÓN CORRESPONDIENTE A UN SÍMBOLO: \"1\"\n");
     AFNDImprime(stdout, p_afnd_l1);

@@ -51,4 +51,6 @@ void copiar_transiciones(Transicion *t_clon, Transicion *t_afnd, char * ext, cha
 
 void transicion_rename(Transicion *t, char *oldName, char* name);
 
+void imprimir_etiquetas(Transicion * t, FILE *f);
+
 #endif

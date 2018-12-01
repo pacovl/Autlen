@@ -513,3 +513,16 @@ void transicion_rename(Transicion *t, char *oldName, char* name) {
 
 	return;
 }
+
+void imprimir_etiquetas(Transicion * t, FILE * fout) {
+	int i, j, k;
+	for (i = 0; i < t->nsim; i++) {
+    for (j = 0; j < t->nest; j++) {
+      for (k = 0; k < t->nest; k++) {
+        if (t->transiciones[i][j][k] == EXISTE) {
+          fprintf(fout, "\t%s -> %s [label=\"%s\"];\n", t->estados[j], t->estados[k], t->simbolos[i]);
+        }
+      }
+    }
+  }
+}

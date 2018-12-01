@@ -194,3 +194,5 @@ AFND* AFND1OEstrella(AFND* afnd);
 
 /* Combierte afnd a la especificacion 1O */
 AFND * AFNDAAFND1O(AFND * p_afnd);
+
+void AFNDADot(AFND * p_afnd);

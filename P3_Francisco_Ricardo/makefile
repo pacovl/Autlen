@@ -59,7 +59,7 @@ test: afnd.o transicion.o estado.o conjunto_simbolos.o test.o
 
 # limpieza
 clean:
-	@rm -f $(wildcard *.o *.d core* *.P) $(EXECS)
+	@rm -f $(wildcard *.o *.d *.dot core* *.P) $(EXECS)
 
 # ayuda (nunca viene mal)
 help:

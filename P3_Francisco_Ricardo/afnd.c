@@ -835,3 +835,40 @@ AFND * AFNDAAFND1O(AFND * p_afnd) {
 
     return NULL;
 }
+
+void AFNDADot(AFND * p_afnd) {
+  FILE *f;
+  TIPO tipo;
+  int i;
+  char nombre[MAX];
+
+  if (!p_afnd) {
+    return;
+  }
+
+  sprintf(nombre, "salida_%s.dot", p_afnd->nombre);
+  f = fopen(nombre, "w");
+  if (!f) {
+    return;
+  }
+
+  fprintf(f, "digraph %s { rankdir=LR;\n\t_invisible [style=\"invis\"];\n", p_afnd->nombre);
+  for (i = 0; i < p_afnd->nest; i++) {
+    tipo = get_tipo_estado(p_afnd->estados[i]);
+    if (tipo == FINAL) {
+      fprintf(f, "\t%s [penwidth=\"2\"];\n", get_name_estado(p_afnd->estados[i]));
+    } else if (tipo == INICIAL) {
+      fprintf(f, "\t%s;\n", get_name_estado(p_afnd->estados[i]));
+      fprintf(f, "\t_invisible -> %s;\n", get_name_estado(p_afnd->estados[i]));
+    } else {
+      fprintf(f, "\t%s;\n", get_name_estado(p_afnd->estados[i]));
+    }
+  }
+
+  imprimir_etiquetas(p_afnd->trans, f);
+
+  fprintf(f, "}\n");
+
+  fclose(f);
+
+}
