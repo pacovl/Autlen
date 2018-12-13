@@ -1,143 +1,119 @@
 /* ===================================================================
-File: test2.c
+File: test1.c
 Authors: Ricardo Riol gonzalez, Francisco de Vicente Lana
 
-Main de pruebas numero 2, un ejemplo simple de clase de teoria.
+Main de pruebas para comprobar varias estrellas recursivas.
 =================================================================== */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 #include "afnd.h"
+
+#define SHELLSCRIPT "\
+#/bin/bash \n\
+dot -Tgif salida_estrella_estrella_estrella_union_afnd_b_afnd_a.dot > test2.gif\n\
+rm salida_estrella_estrella_estrella_union_afnd_b_afnd_a.dot\n\
+"
 
 int main(int argc, char **argv)
 {
-    /* DECLARACIÓN DE UN PUNTERO A UN AFND */
-    AFND *p_afnd;
+    AFND *p_afnd_l0;
+    AFND *p_afnd_l1;
+    AFND *p_afnd_l2;
+    AFND *p_afnd_l3;
+    AFND *p_afnd_l4;
+    AFND *p_afnd_l5;
 
-    /* INICIALIZACIÓN DE UN NUEVO AFND DE NOMBRE afl1 Y CON 8 ESTADOS Y 
-    2 SÍMBOLOS EN SU ALFABETO */
-    p_afnd = AFNDNuevo("afl1", 4, 2);
+    /* SE CREA UN AUTÓMATA FINITO PARA LA EXPRESION REGULAR “1” */
+    p_afnd_l1 = AFND1ODeSimbolo("a");
+    /* SE CREA UN AUTÓMATA FINITO PARA LA EXPRESION REGULAR “0” */
+    p_afnd_l0 = AFND1ODeSimbolo("b");
+    /* SE CREA UN AUTÓMATA FINITO PARA LA EXPRESION REGULAR “0”+“1” */
+    p_afnd_l2 = AFND1OUne(p_afnd_l0, p_afnd_l1);
+    /* SE CREA UN AUTÓMATA FINITO PARA LA EXPRESIÓN ( “0”+”1” ) * */
+    p_afnd_l3 = AFND1OEstrella(p_afnd_l2);
+    /* SE CREA UN AUTÓMATA FINITO PARA LA EXPRESIÓN ( “0”+”1” ) * * */
+    p_afnd_l4 = AFND1OEstrella(p_afnd_l3);
+    /* SE CREA UN AUTÓMATA FINITO PARA LA EXPRESIÓN ( “0”+”1” ) * * * */
+    p_afnd_l5 = AFND1OEstrella(p_afnd_l4);
 
-    /* DEFINICIÓN DEL ALFABETO DEL AFND */
-    AFNDInsertaSimbolo(p_afnd, "a");
-    AFNDInsertaSimbolo(p_afnd, "b");
+    AFNDADot(p_afnd_l5);
 
-    /* DEFINICIÓN DEL CONJUNTO DE ESTADOS */
-    AFNDInsertaEstado(p_afnd, "q0", INICIAL);
-    AFNDInsertaEstado(p_afnd, "q1", NORMAL);
-    AFNDInsertaEstado(p_afnd, "q2", NORMAL);
-    AFNDInsertaEstado(p_afnd, "q3", FINAL);
+     /* SE CALCULA EL CIERRE REFLEXIVO-TRANSITIVO DE TODOS LOS AUTÓMATAS */
+    p_afnd_l0 = AFNDCierraLTransicion(p_afnd_l0);
+    p_afnd_l1 = AFNDCierraLTransicion(p_afnd_l1);
+    p_afnd_l2 = AFNDCierraLTransicion(p_afnd_l2);
+    p_afnd_l3 = AFNDCierraLTransicion(p_afnd_l3);
+    p_afnd_l4 = AFNDCierraLTransicion(p_afnd_l4);
+    p_afnd_l5 = AFNDCierraLTransicion(p_afnd_l5);
 
-    /* DEFINICIÓN DE LAS TRANSICIONES NO LAMBDA */
-    AFNDInsertaTransicion(p_afnd, "q0", "b", "q2");
-    AFNDInsertaTransicion(p_afnd, "q0", "a", "q3");
-    AFNDInsertaTransicion(p_afnd, "q1", "a", "q0");
-    AFNDInsertaTransicion(p_afnd, "q1", "a", "q2");
-    AFNDInsertaTransicion(p_afnd, "q1", "b", "q3");
-    AFNDInsertaTransicion(p_afnd, "q3", "a", "q3");
+    /********************************************************/
+    fprintf(stdout, "SE MUESTRA EL AUTÓMATA FINITO CORRESPONDIENTE A LA EXPRESION \"1\" * A PARTIR DEL AUTÓMATA ASOCIADO CON \"1\" QUE YA SE MOSTRÓ ANTERIORMENTE\n");
+    AFNDImprime(stdout, p_afnd_l5);
 
-    /** DEFINICIÓN DE LAS TRANSICIONES LAMBDA*/
-    AFNDInsertaLTransicion(p_afnd, "q2", "q1");
+    /* SE CREA UN AUTÓMATA FINITO PARA LA EXPRESIÓN ( “0”+”1” ) * */
+    fprintf(stdout, "Y ESTE es (0+1)*\n");
+    AFNDImprime(stdout, p_afnd_l5);
 
-    /** INDUCIMOS EL RESTO DE TRANSICIONES LAMBDA*/
-    AFNDCierraLTransicion(p_afnd);
+    /********************************************************/
+    fprintf(stdout, "Y, A CONTINUACIÓN, ALGUNOS EJEMPLOS DE PROCESADO DE CADENAS DEL AUTÓMATA DE LA EXPRESIÓN 11(0+1)*\n");
+    AFNDImprime(stdout, p_afnd_l3);
+    fprintf(stdout, "\tLA CADENA ab ES RECONOCIDA\n");
+    AFNDInsertaLetra(p_afnd_l5, "a");
+    AFNDInsertaLetra(p_afnd_l5, "b");
+    AFNDImprimeCadenaActual(stdout, p_afnd_l5);
+    AFNDInicializaEstado(p_afnd_l5);
+    AFNDProcesaEntrada(stdout, p_afnd_l5);
 
-    /* SE MUESTRA EL AFND DEFINIDO */
-    AFNDImprime(stdout, p_afnd);
+    AFNDInicializaCadenaActual(p_afnd_l5);
+    fprintf(stdout, "\tLA CADENA bba TAMBIÉN ES RECONOCIDA\n");
+    AFNDInsertaLetra(p_afnd_l5, "b");
+    AFNDInsertaLetra(p_afnd_l5, "b");
+    AFNDInsertaLetra(p_afnd_l5, "a");
+    AFNDImprimeCadenaActual(stdout, p_afnd_l5);
+    AFNDInicializaEstado(p_afnd_l5);
+    AFNDProcesaEntrada(stdout, p_afnd_l5);
 
-    /* DEFINICIÓN DE LA CADENA DE ENTRADA [] (cadena vacia), no aceptada */
+    AFNDInicializaCadenaActual(p_afnd_l5);
+    fprintf(stdout, "\tLA CADENA aab TAMBIÉN ES RECONOCIDA\n");
+    AFNDInsertaLetra(p_afnd_l5, "a");
+    AFNDInsertaLetra(p_afnd_l5, "a");
+    AFNDInsertaLetra(p_afnd_l5, "b");
+    AFNDImprimeCadenaActual(stdout, p_afnd_l5);
+    AFNDInicializaEstado(p_afnd_l5);
+    AFNDProcesaEntrada(stdout, p_afnd_l5);
 
-    /* SE ESTABLECE COMO ESTADO ACTUAL DEL AUTÓMATA EL INICIAL */
-    p_afnd = AFNDInicializaEstado(p_afnd);
+    AFNDInicializaCadenaActual(p_afnd_l5);
+    fprintf(stdout, "\tLA CADENA abababb TAMBIÉN ES RECONOCIDA\n");
+    AFNDInsertaLetra(p_afnd_l5, "a");
+    AFNDInsertaLetra(p_afnd_l5, "b");
+    AFNDInsertaLetra(p_afnd_l5, "a");
+    AFNDInsertaLetra(p_afnd_l5, "b");
+    AFNDInsertaLetra(p_afnd_l5, "a");
+    AFNDInsertaLetra(p_afnd_l5, "b");
+    AFNDInsertaLetra(p_afnd_l5, "b");
+    AFNDImprimeCadenaActual(stdout, p_afnd_l5);
+    AFNDInicializaEstado(p_afnd_l5);
+    AFNDProcesaEntrada(stdout, p_afnd_l5);
 
-    /* SE MUESTRA LA CADENA ACTUAL */
-    fprintf(stdout, "\n**************** PROCESA CADENA *************\n");
-    AFNDImprimeCadenaActual(stdout, p_afnd);
-    fprintf(stdout, "\n*********************************************\n");
+    AFNDInicializaCadenaActual(p_afnd_l5);
+    fprintf(stdout, "\tLA CADENA VACIA SIN EMBARGO NO ES RECONOCIDA\n");
+    AFNDImprimeCadenaActual(stdout, p_afnd_l5);
+    AFNDInicializaEstado(p_afnd_l5);
+    AFNDProcesaEntrada(stdout, p_afnd_l5);
+    AFNDInicializaCadenaActual(p_afnd_l5);
 
-    AFNDProcesaEntrada(stdout, p_afnd);
+    /********************************************************/
+    AFNDElimina(p_afnd_l0);
+    AFNDElimina(p_afnd_l1);
+    AFNDElimina(p_afnd_l2);
+    AFNDElimina(p_afnd_l3);
+    AFNDElimina(p_afnd_l4);
+    AFNDElimina(p_afnd_l5);
+    /********************************************************************************/
 
-    /*********************************************************************************/
+    puts(SHELLSCRIPT);
+    system(SHELLSCRIPT);
 
-    /**INTRODUCIMOS NUEVA CADENA DE ENTRADA [ aaaa ], aceptada */
-    p_afnd = AFNDInicializaCadenaActual(p_afnd);
-    AFNDInsertaLetra(p_afnd, "a");
-    AFNDInsertaLetra(p_afnd, "a");
-    AFNDInsertaLetra(p_afnd, "a");
-    AFNDInsertaLetra(p_afnd, "a");
-
-    p_afnd = AFNDInicializaEstado(p_afnd);
-
-    fprintf(stdout, "\n**************** PROCESA CADENA *************\n");
-    AFNDImprimeCadenaActual(stdout, p_afnd);
-    fprintf(stdout, "\n*********************************************\n");
-
-    AFNDProcesaEntrada(stdout, p_afnd);
-
-    /*********************************************************************************/
-
-    /**NUEVA CADENA DE ENTRADA [ aaab ], no aceptada */
-    p_afnd = AFNDInicializaCadenaActual(p_afnd);
-    AFNDInsertaLetra(p_afnd, "a");
-    AFNDInsertaLetra(p_afnd, "a");
-    AFNDInsertaLetra(p_afnd, "a");
-    AFNDInsertaLetra(p_afnd, "b");
-
-    p_afnd = AFNDInicializaEstado(p_afnd);
-
-    fprintf(stdout, "\n**************** PROCESA CADENA *************\n");
-    AFNDImprimeCadenaActual(stdout, p_afnd);
-    fprintf(stdout, "\n*********************************************\n");
-
-    AFNDProcesaEntrada(stdout, p_afnd);
-
-    /*********************************************************************************/
-
-    /**NUEVA CADENA DE ENTRADA [ baaabaaa ], aceptada */
-    p_afnd = AFNDInicializaCadenaActual(p_afnd);
-    AFNDInsertaLetra(p_afnd, "b");
-    AFNDInsertaLetra(p_afnd, "a");
-    AFNDInsertaLetra(p_afnd, "a");
-    AFNDInsertaLetra(p_afnd, "a");
-    AFNDInsertaLetra(p_afnd, "b");
-    AFNDInsertaLetra(p_afnd, "a");
-    AFNDInsertaLetra(p_afnd, "a");
-    AFNDInsertaLetra(p_afnd, "a");
-
-    p_afnd = AFNDInicializaEstado(p_afnd);
-
-    fprintf(stdout, "\n**************** PROCESA CADENA *************\n");
-    AFNDImprimeCadenaActual(stdout, p_afnd);
-    fprintf(stdout, "\n*********************************************\n");
-
-    AFNDProcesaEntrada(stdout, p_afnd);
-
-    /*********************************************************************************/
-
-    /**NUEVA CADENA DE ENTRADA [ baabbaaa ], aceptada */
-    p_afnd = AFNDInicializaCadenaActual(p_afnd);
-    AFNDInsertaLetra(p_afnd, "b");
-    AFNDInsertaLetra(p_afnd, "a");
-    AFNDInsertaLetra(p_afnd, "a");
-    AFNDInsertaLetra(p_afnd, "b");
-    AFNDInsertaLetra(p_afnd, "b");
-    AFNDInsertaLetra(p_afnd, "a");
-    AFNDInsertaLetra(p_afnd, "a");
-    AFNDInsertaLetra(p_afnd, "a");
-
-    p_afnd = AFNDInicializaEstado(p_afnd);
-
-    fprintf(stdout, "\n**************** PROCESA CADENA *************\n");
-    AFNDImprimeCadenaActual(stdout, p_afnd);
-    fprintf(stdout, "\n*********************************************\n");
-
-    AFNDProcesaEntrada(stdout, p_afnd);
-
-    /*********************************************************************************/
-
-    /* SE LIBERAN TODOS LOS RECURSOS ASOCIADOS CON EL AFND */
-    AFNDElimina(p_afnd);
-
-    return EXIT_SUCCESS;
+    return 0;
 }

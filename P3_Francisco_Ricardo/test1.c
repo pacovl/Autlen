@@ -2,13 +2,30 @@
 File: test1.c
 Authors: Ricardo Riol gonzalez, Francisco de Vicente Lana
 
-Main de pruebas numero 1. Se trata del proporcionado en el enunciado
+Main de pruebas proporcionado en el enunciado.
 =================================================================== */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 #include "afnd.h"
+
+#define SHELLSCRIPT "\
+#/bin/bash \n\
+dot -Tgif salida_afnd_0.dot > 0.gif\n\
+dot -Tgif salida_afnd_1.dot > 1.gif\n\
+dot -Tgif salida_concatenacion_afnd_1_afnd_1.dot > 2.gif\n\
+dot -Tgif salida_concatenacion_concatenacion_afnd_1_afnd_1_estrella_union_afnd_0_afnd_1.dot > 3.gif\n\
+dot -Tgif salida_union_afnd_0_afnd_1.dot > 4.gif\n\
+dot -Tgif salida_estrella_union_afnd_0_afnd_1.dot > 5.gif\n\
+dot -Tgif salida_estrella_afnd_1.dot > 6.gif\n\
+rm salida_afnd_0.dot\n\
+rm salida_afnd_1.dot\n\
+rm salida_concatenacion_afnd_1_afnd_1.dot\n\
+rm salida_concatenacion_concatenacion_afnd_1_afnd_1_estrella_union_afnd_0_afnd_1.dot\n\
+rm salida_union_afnd_0_afnd_1.dot\n\
+rm salida_estrella_union_afnd_0_afnd_1.dot\n\
+rm salida_estrella_afnd_1.dot\n\
+"
 
 int main(int argc, char **argv)
 {
@@ -34,7 +51,23 @@ int main(int argc, char **argv)
     p_afnd_l3 = AFND1OConcatena(p_afnd_l2, p_afnd_l5);
     /* SE CREA UN AUTÓMATA FINITO PARA LA EXPRESIÓN "1" * */
     p_afnd_l6 = AFND1OEstrella(p_afnd_l1);
-    /* SE CALCULA EL CIERRE REFLEXIVO-TRANSITIVO DE TODOS LOS AUTÓMATAS */
+
+    // 0
+    AFNDADot(p_afnd_l0);
+    // 1
+    AFNDADot(p_afnd_l1);
+    // 11
+    AFNDADot(p_afnd_l2);
+    // 11(0+1)
+    AFNDADot(p_afnd_l3);
+    // 0+1
+    AFNDADot(p_afnd_l4);
+    // (0+1)*
+    AFNDADot(p_afnd_l5);
+    // 1*
+    AFNDADot(p_afnd_l6);
+
+     /* SE CALCULA EL CIERRE REFLEXIVO-TRANSITIVO DE TODOS LOS AUTÓMATAS */
     p_afnd_l0 = AFNDCierraLTransicion(p_afnd_l0);
     p_afnd_l1 = AFNDCierraLTransicion(p_afnd_l1);
     p_afnd_l2 = AFNDCierraLTransicion(p_afnd_l2);
@@ -43,13 +76,6 @@ int main(int argc, char **argv)
     p_afnd_l5 = AFNDCierraLTransicion(p_afnd_l5);
     p_afnd_l6 = AFNDCierraLTransicion(p_afnd_l6);
 
-    AFNDADot(p_afnd_l0);
-    AFNDADot(p_afnd_l1);
-    AFNDADot(p_afnd_l2);
-    AFNDADot(p_afnd_l3);
-    AFNDADot(p_afnd_l4);
-    AFNDADot(p_afnd_l5);
-    AFNDADot(p_afnd_l6);
     /********************************************************/
     fprintf(stdout, "EJEMPLO DE AUTÓMATA DE UNA EXPRESIÓN CORRESPONDIENTE A UN SÍMBOLO: \"1\"\n");
     AFNDImprime(stdout, p_afnd_l1);
@@ -65,7 +91,6 @@ int main(int argc, char **argv)
     AFNDImprime(stdout, p_afnd_l6);
 
     /* SE CREA UN AUTÓMATA FINITO PARA LA EXPRESIÓN ( “0”+”1” ) * */
-    // (0+1)*
     fprintf(stdout, "Y ESTE es (0+1)*\n");
     AFNDImprime(stdout, p_afnd_l5);
 
@@ -123,6 +148,9 @@ int main(int argc, char **argv)
     AFNDElimina(p_afnd_l5);
     AFNDElimina(p_afnd_l6);
     /********************************************************************************/
+
+    puts(SHELLSCRIPT);
+    system(SHELLSCRIPT);
 
     return 0;
 }
