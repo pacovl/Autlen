@@ -957,7 +957,7 @@ AFND *AFNDAAFND1O(AFND *afnd)
         }
         else {
             printf("ERROR: Estado sin tipo\n");
-            return -1;
+            return NULL;
         }
     }
 

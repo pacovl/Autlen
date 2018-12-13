@@ -2,7 +2,7 @@
 File: test1.c
 Authors: Ricardo Riol gonzalez, Francisco de Vicente Lana
 
-Main de pruebas para comprobar varias estrellas recursivas.
+Main de pruebas para comprobar varias concatenaciones y uniones encadenadas.
 =================================================================== */
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,8 +11,8 @@ Main de pruebas para comprobar varias estrellas recursivas.
 
 #define SHELLSCRIPT "\
 #/bin/bash \n\
-dot -Tgif  > test3.gif\n\
-rm \n\
+dot -Tgif salida_union_union_concatenacion_afnd_0_afnd_0_concatenacion_afnd_0_afnd_1_union_concatenacion_afnd_1_afnd_0_concatenacion_afnd_1_afnd_1.dot > imgs/test3.gif\n\
+rm salida_union_union_concatenacion_afnd_0_afnd_0_concatenacion_afnd_0_afnd_1_union_concatenacion_afnd_1_afnd_0_concatenacion_afnd_1_afnd_1.dot\n\
 "
 
 int main(int argc, char **argv)
@@ -24,84 +24,98 @@ int main(int argc, char **argv)
     AFND *p_afnd_l4;
     AFND *p_afnd_l5;
 
+    AFND *p_afnd_l6;
+    AFND *p_afnd_l7;
+
+    AFND *p_afnd_l8;
+
     /* SE CREA UN AUTÓMATA FINITO PARA LA EXPRESION REGULAR “1” */
     p_afnd_l1 = AFND1ODeSimbolo("1");
     /* SE CREA UN AUTÓMATA FINITO PARA LA EXPRESION REGULAR “0” */
     p_afnd_l0 = AFND1ODeSimbolo("0");
-    /* SE CREA UN AUTÓMATA FINITO PARA LA EXPRESION REGULAR “0”+“1” */
-    p_afnd_l2 = AFND1OUne(p_afnd_l0, p_afnd_l1);
-    /* SE CREA UN AUTÓMATA FINITO PARA LA EXPRESIÓN ( “0”+”1” ) * */
-    p_afnd_l3 = AFND1OEstrella(p_afnd_l2);
-    /* SE CREA UN AUTÓMATA FINITO PARA LA EXPRESIÓN ( “0”+”1” ) * * */
-    p_afnd_l4 = AFND1OEstrella(p_afnd_l3);
-    /* SE CREA UN AUTÓMATA FINITO PARA LA EXPRESIÓN ( “0”+”1” ) * * * */
-    p_afnd_l5 = AFND1OEstrella(p_afnd_l4);
+    /* SE CREA UN AUTÓMATA FINITO PARA LA EXPRESIÓN ( “0”+”0” ) */
+    p_afnd_l2 = AFND1OConcatena(p_afnd_l0, p_afnd_l0);
+    /* SE CREA UN AUTÓMATA FINITO PARA LA EXPRESIÓN ( “0”+”1” ) */
+    p_afnd_l3 = AFND1OConcatena(p_afnd_l0, p_afnd_l1);
+    /* SE CREA UN AUTÓMATA FINITO PARA LA EXPRESIÓN ( “1”+”0” ) */
+    p_afnd_l4 = AFND1OConcatena(p_afnd_l1, p_afnd_l0);
+    /* SE CREA UN AUTÓMATA FINITO PARA LA EXPRESIÓN ( “1”+”1” ) */
+    p_afnd_l5 = AFND1OConcatena(p_afnd_l1, p_afnd_l1);
 
-    AFNDADot(p_afnd_l5);
+    /* 00 + 01 */
+    p_afnd_l6 = AFND1OUne(p_afnd_l2, p_afnd_l3);
+    /* 10 + 11 */
+    p_afnd_l7 = AFND1OUne(p_afnd_l4, p_afnd_l5);
+
+    /* 00 + 01 + 10 + 11 */
+    p_afnd_l8 = AFND1OUne(p_afnd_l6, p_afnd_l7);
+
+    AFNDADot(p_afnd_l8);
 
      /* SE CALCULA EL CIERRE REFLEXIVO-TRANSITIVO DE TODOS LOS AUTÓMATAS */
-    p_afnd_l0 = AFNDCierraLTransicion(p_afnd_l0);
-    p_afnd_l1 = AFNDCierraLTransicion(p_afnd_l1);
-    p_afnd_l2 = AFNDCierraLTransicion(p_afnd_l2);
-    p_afnd_l3 = AFNDCierraLTransicion(p_afnd_l3);
-    p_afnd_l4 = AFNDCierraLTransicion(p_afnd_l4);
-    p_afnd_l5 = AFNDCierraLTransicion(p_afnd_l5);
+    p_afnd_l8 = AFNDCierraLTransicion(p_afnd_l8);
 
     /********************************************************/
-    fprintf(stdout, "SE MUESTRA EL AUTÓMATA FINITO CORRESPONDIENTE A LA EXPRESION \"1\" * A PARTIR DEL AUTÓMATA ASOCIADO CON \"1\" QUE YA SE MOSTRÓ ANTERIORMENTE\n");
-    AFNDImprime(stdout, p_afnd_l5);
-
-    /* SE CREA UN AUTÓMATA FINITO PARA LA EXPRESIÓN ( “0”+”1” ) * */
-    fprintf(stdout, "Y ESTE es (0+1)*\n");
-    AFNDImprime(stdout, p_afnd_l5);
+    fprintf(stdout, "SE MUESTRA EL AUTÓMATA FINITO CONSTRUIDO\n");
+    AFNDImprime(stdout, p_afnd_l8);
 
     /********************************************************/
-    fprintf(stdout, "Y, A CONTINUACIÓN, ALGUNOS EJEMPLOS DE PROCESADO DE CADENAS DEL AUTÓMATA DE LA EXPRESIÓN 11(0+1)*\n");
-    AFNDImprime(stdout, p_afnd_l3);
-    fprintf(stdout, "\tLA CADENA ab ES RECONOCIDA\n");
-    AFNDInsertaLetra(p_afnd_l5, "a");
-    AFNDInsertaLetra(p_afnd_l5, "b");
-    AFNDImprimeCadenaActual(stdout, p_afnd_l5);
-    AFNDInicializaEstado(p_afnd_l5);
-    AFNDProcesaEntrada(stdout, p_afnd_l5);
+    fprintf(stdout, "\tLA CADENA 00 ES RECONOCIDA\n");
+    AFNDInsertaLetra(p_afnd_l8, "0");
+    AFNDInsertaLetra(p_afnd_l8, "0");
+    AFNDImprimeCadenaActual(stdout, p_afnd_l8);
+    AFNDInicializaEstado(p_afnd_l8);
+    AFNDProcesaEntrada(stdout, p_afnd_l8);
 
-    AFNDInicializaCadenaActual(p_afnd_l5);
-    fprintf(stdout, "\tLA CADENA bba TAMBIÉN ES RECONOCIDA\n");
-    AFNDInsertaLetra(p_afnd_l5, "b");
-    AFNDInsertaLetra(p_afnd_l5, "b");
-    AFNDInsertaLetra(p_afnd_l5, "a");
-    AFNDImprimeCadenaActual(stdout, p_afnd_l5);
-    AFNDInicializaEstado(p_afnd_l5);
-    AFNDProcesaEntrada(stdout, p_afnd_l5);
+    AFNDInicializaCadenaActual(p_afnd_l8);
+    fprintf(stdout, "\tLA CADENA 01 TAMBIÉN ES RECONOCIDA\n");
+    AFNDInsertaLetra(p_afnd_l8, "0");
+    AFNDInsertaLetra(p_afnd_l8, "1");
+    AFNDImprimeCadenaActual(stdout, p_afnd_l8);
+    AFNDInicializaEstado(p_afnd_l8);
+    AFNDProcesaEntrada(stdout, p_afnd_l8);
 
-    AFNDInicializaCadenaActual(p_afnd_l5);
-    fprintf(stdout, "\tLA CADENA aab TAMBIÉN ES RECONOCIDA\n");
-    AFNDInsertaLetra(p_afnd_l5, "a");
-    AFNDInsertaLetra(p_afnd_l5, "a");
-    AFNDInsertaLetra(p_afnd_l5, "b");
-    AFNDImprimeCadenaActual(stdout, p_afnd_l5);
-    AFNDInicializaEstado(p_afnd_l5);
-    AFNDProcesaEntrada(stdout, p_afnd_l5);
+    AFNDInicializaCadenaActual(p_afnd_l8);
+    fprintf(stdout, "\tLA CADENA 10 TAMBIÉN ES RECONOCIDA\n");
+    AFNDInsertaLetra(p_afnd_l8, "1");
+    AFNDInsertaLetra(p_afnd_l8, "0");
+    AFNDImprimeCadenaActual(stdout, p_afnd_l8);
+    AFNDInicializaEstado(p_afnd_l8);
+    AFNDProcesaEntrada(stdout, p_afnd_l8);
 
-    AFNDInicializaCadenaActual(p_afnd_l5);
-    fprintf(stdout, "\tLA CADENA abababb TAMBIÉN ES RECONOCIDA\n");
-    AFNDInsertaLetra(p_afnd_l5, "a");
-    AFNDInsertaLetra(p_afnd_l5, "b");
-    AFNDInsertaLetra(p_afnd_l5, "a");
-    AFNDInsertaLetra(p_afnd_l5, "b");
-    AFNDInsertaLetra(p_afnd_l5, "a");
-    AFNDInsertaLetra(p_afnd_l5, "b");
-    AFNDInsertaLetra(p_afnd_l5, "b");
-    AFNDImprimeCadenaActual(stdout, p_afnd_l5);
-    AFNDInicializaEstado(p_afnd_l5);
-    AFNDProcesaEntrada(stdout, p_afnd_l5);
+    AFNDInicializaCadenaActual(p_afnd_l8);
+    fprintf(stdout, "\tLA CADENA 11 TAMBIÉN ES RECONOCIDA\n");
+    AFNDInsertaLetra(p_afnd_l8, "1");
+    AFNDInsertaLetra(p_afnd_l8, "1");
+    AFNDImprimeCadenaActual(stdout, p_afnd_l8);
+    AFNDInicializaEstado(p_afnd_l8);
+    AFNDProcesaEntrada(stdout, p_afnd_l8);
 
-    AFNDInicializaCadenaActual(p_afnd_l5);
+    AFNDInicializaCadenaActual(p_afnd_l8);
     fprintf(stdout, "\tLA CADENA VACIA SIN EMBARGO NO ES RECONOCIDA\n");
-    AFNDImprimeCadenaActual(stdout, p_afnd_l5);
-    AFNDInicializaEstado(p_afnd_l5);
-    AFNDProcesaEntrada(stdout, p_afnd_l5);
-    AFNDInicializaCadenaActual(p_afnd_l5);
+    AFNDImprimeCadenaActual(stdout, p_afnd_l8);
+    AFNDInicializaEstado(p_afnd_l8);
+    AFNDProcesaEntrada(stdout, p_afnd_l8);
+    AFNDInicializaCadenaActual(p_afnd_l8);
+
+    AFNDInicializaCadenaActual(p_afnd_l8);
+    fprintf(stdout, "\tLA CADENA 000 NO ES RECONOCIDA\n");
+    AFNDInsertaLetra(p_afnd_l8, "0");
+    AFNDInsertaLetra(p_afnd_l8, "0");
+    AFNDInsertaLetra(p_afnd_l8, "0");
+    AFNDImprimeCadenaActual(stdout, p_afnd_l8);
+    AFNDInicializaEstado(p_afnd_l8);
+    AFNDProcesaEntrada(stdout, p_afnd_l8);
+
+    AFNDInicializaCadenaActual(p_afnd_l8);
+    fprintf(stdout, "\tLA CADENA 0011 NO ES RECONOCIDA\n");
+    AFNDInsertaLetra(p_afnd_l8, "0");
+    AFNDInsertaLetra(p_afnd_l8, "0");
+    AFNDInsertaLetra(p_afnd_l8, "1");
+    AFNDInsertaLetra(p_afnd_l8, "1");
+    AFNDImprimeCadenaActual(stdout, p_afnd_l8);
+    AFNDInicializaEstado(p_afnd_l8);
+    AFNDProcesaEntrada(stdout, p_afnd_l8);
 
     /********************************************************/
     AFNDElimina(p_afnd_l0);
@@ -110,6 +124,9 @@ int main(int argc, char **argv)
     AFNDElimina(p_afnd_l3);
     AFNDElimina(p_afnd_l4);
     AFNDElimina(p_afnd_l5);
+    AFNDElimina(p_afnd_l6);
+    AFNDElimina(p_afnd_l7);
+    AFNDElimina(p_afnd_l8);
     /********************************************************************************/
 
     puts(SHELLSCRIPT);

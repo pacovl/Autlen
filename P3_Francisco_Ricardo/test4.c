@@ -6,8 +6,13 @@ Test de prueba la funcion AFNDAAFND1o
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 #include "afnd.h"
+
+#define SHELLSCRIPT "\
+#/bin/bash \n\
+dot -Tgif salida_final_state_afl1.dot > imgs/test4.gif\n\
+rm salida_final_state_afl1.dot\n\
+"
 
 int main(int argc, char **argv)
 {
@@ -26,8 +31,8 @@ int main(int argc, char **argv)
     /* DEFINICIÓN DEL CONJUNTO DE ESTADOS */
     AFNDInsertaEstado(p_afnd, "q0", INICIAL);
     AFNDInsertaEstado(p_afnd, "q1", INICIAL);
-    AFNDInsertaEstado(p_afnd, "q4", FINAL);
-    AFNDInsertaEstado(p_afnd, "qf", FINAL);
+    AFNDInsertaEstado(p_afnd, "q2", FINAL);
+    AFNDInsertaEstado(p_afnd, "q3", FINAL);
 
     /* DEFINICIÓN DE LAS TRANSICIONES NO LAMBDA */
     AFNDInsertaTransicion(p_afnd, "q0", "0", "q0");
@@ -46,9 +51,8 @@ int main(int argc, char **argv)
     /** DEFINICIÓN DE LAS TRANSICIONES LAMBDA*/
     AFNDImprime(stdout, afnd);
 
-
-    /*Dibujamos el autómata*/
-    AFNADOT(p_afnd);
+    /*Dibujamos el automata*/
+    AFNDADot(afnd);
 
     /** INDUCIMOS EL RESTO DE TRANSICIONES LAMBDA*/
     AFNDCierraLTransicion(afnd);
@@ -61,6 +65,8 @@ int main(int argc, char **argv)
     AFNDElimina(p_afnd);
     AFNDElimina(afnd);
 
+    puts(SHELLSCRIPT);
+    system(SHELLSCRIPT);
 
     return 0;
 }

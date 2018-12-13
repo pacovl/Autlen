@@ -40,24 +40,13 @@ int main(int argc, char **argv)
     AFNDADot(p_afnd_l5);
 
      /* SE CALCULA EL CIERRE REFLEXIVO-TRANSITIVO DE TODOS LOS AUTÓMATAS */
-    p_afnd_l0 = AFNDCierraLTransicion(p_afnd_l0);
-    p_afnd_l1 = AFNDCierraLTransicion(p_afnd_l1);
-    p_afnd_l2 = AFNDCierraLTransicion(p_afnd_l2);
-    p_afnd_l3 = AFNDCierraLTransicion(p_afnd_l3);
-    p_afnd_l4 = AFNDCierraLTransicion(p_afnd_l4);
     p_afnd_l5 = AFNDCierraLTransicion(p_afnd_l5);
 
     /********************************************************/
     fprintf(stdout, "SE MUESTRA EL AUTÓMATA FINITO CORRESPONDIENTE A LA EXPRESION \"1\" * A PARTIR DEL AUTÓMATA ASOCIADO CON \"1\" QUE YA SE MOSTRÓ ANTERIORMENTE\n");
     AFNDImprime(stdout, p_afnd_l5);
-
-    /* SE CREA UN AUTÓMATA FINITO PARA LA EXPRESIÓN ( “0”+”1” ) * */
-    fprintf(stdout, "Y ESTE es (0+1)*\n");
-    AFNDImprime(stdout, p_afnd_l5);
-
+    
     /********************************************************/
-    fprintf(stdout, "Y, A CONTINUACIÓN, ALGUNOS EJEMPLOS DE PROCESADO DE CADENAS DEL AUTÓMATA DE LA EXPRESIÓN 11(0+1)*\n");
-    AFNDImprime(stdout, p_afnd_l3);
     fprintf(stdout, "\tLA CADENA ab ES RECONOCIDA\n");
     AFNDInsertaLetra(p_afnd_l5, "a");
     AFNDInsertaLetra(p_afnd_l5, "b");
@@ -97,7 +86,7 @@ int main(int argc, char **argv)
     AFNDProcesaEntrada(stdout, p_afnd_l5);
 
     AFNDInicializaCadenaActual(p_afnd_l5);
-    fprintf(stdout, "\tLA CADENA VACIA SIN EMBARGO NO ES RECONOCIDA\n");
+    fprintf(stdout, "\tLA CADENA VACIA ES RECONOCIDA\n");
     AFNDImprimeCadenaActual(stdout, p_afnd_l5);
     AFNDInicializaEstado(p_afnd_l5);
     AFNDProcesaEntrada(stdout, p_afnd_l5);
