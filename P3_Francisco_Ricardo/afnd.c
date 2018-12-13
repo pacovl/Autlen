@@ -955,6 +955,10 @@ AFND *AFNDAAFND1O(AFND *afnd)
             AFNDInsertaLTransicion(p_afnd, nombreIni, nombreAux);
             AFNDInsertaLTransicion(p_afnd, nombreAux, nombreFin);
         }
+        else {
+            printf("ERROR: Estado sin tipo\n");
+            return -1;
+        }
     }
 
     /* Copia conjunto de transiciones */
