@@ -367,6 +367,10 @@ void transicion_inducir(Transicion *t)
 		return;
 	}
 
+	for (i = 0; i < t->nest; i++){
+		t->transiciones[sim][i][i] = EXISTE;
+	}
+
 	for (i = 0; i < t->nest; i++)
 	{
 		estados_actualizados = transicion_inducir_aux(t, sim, i, estados_accesibles, &num);
